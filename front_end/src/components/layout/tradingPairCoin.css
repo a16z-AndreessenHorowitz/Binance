@@ -1,0 +1,97 @@
+.tradingPair{
+  width: 80%;
+  height: 55px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 15px;
+  border-radius: 8px;
+  border-top: 2px solid #f3f3f3;
+  border-left: 4px solid #f3f3f3;
+  border-right: 4px solid #f3f3f3;
+  border-bottom: 4px solid #f3f3f3;  
+  overflow: hidden;
+}
+.tradingPair .childrenContainer{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap:15px;
+}
+
+.tradingPair .childrenContainer .FavoritePairCoin{
+  width: 16px;
+  height:16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tradingPair .childrenContainer .imagePairCoin{
+  width: 24px;
+  height: 24px;
+}
+.tradingPair .childrenContainer .imagePairCoin img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.namePairCoin{
+  margin-right:4px;
+}
+
+.namePairCoin .pairCoin{
+  font-size: 20px;
+}
+.namePairCoin .linkPairCoin{
+  font-size: 12px;
+}
+
+.nowPrice .showPrice{
+  font-size:20px;
+  color:#2FBD84;
+}
+.nowPrice .subPrice{
+  font-size:12px;
+}
+
+/* Phần state  */
+.tradingStats{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 0 0 auto;
+  gap:15px;
+  margin-left:20px;
+}
+.tradingStats .statItem .statLabel{
+  font-size: 12px;
+}
+.tradingStats .statItem .statValue{
+  font-size: 12px;
+}
+/* 
+.statsNextButton{
+  border: none;
+  background-color: transparent;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+} */
+.statValue{
+  display: flex;
+  align-items: center;
+}
+.statValue a:not(:last-child)::after{
+  content: "|";
+  margin: 0 4px;
+}
+
+@media (max-width: 1024px){
+  .tradingPair{
+    width: 100%;
+  }
+}
