@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import TradePage from "../pages/client/trading/TradePage";
+import TradePage from "../pages/client/trading/tradePage";
 
 function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<TradePage />} />
+        <Route path="/markets/overview" element={<TradePage />} />
       </Routes>
     </BrowserRouter>
   );

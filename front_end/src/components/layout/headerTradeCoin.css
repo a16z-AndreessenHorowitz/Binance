@@ -35,7 +35,7 @@
   list-style: none;
 }
 .mainNav ul li a{
-  color:#000;
+  color: inherit;
   min-width: 70px;
   padding: 8px 10px;
   display: flex;
@@ -44,6 +44,7 @@
   gap: 3px;
   text-decoration: none;
   font-size: 14px;
+  
 }
 
 .dropdownIcon{

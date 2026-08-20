@@ -21,12 +21,6 @@ public class BinanceService {
     this.restClient = restClient;
   }
 
-  public BinanceTickerDTO getTicker(String symbol){
-    return restClient.get()
-      .uri("/api/v3/ticker/24hr?symbol=" + symbol)
-      .retrieve()
-      .body(BinanceTickerDTO.class);
-  }
 
   public boolean isTradableSymbol(String symbol) {
     return getTradableSymbols().contains(symbol);

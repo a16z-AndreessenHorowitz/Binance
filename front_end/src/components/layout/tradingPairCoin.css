@@ -12,6 +12,12 @@
   border-bottom: 4px solid #f3f3f3;  
   overflow: hidden;
 }
+.dropdownCoin{
+  display: none;
+}
+.tradingStats2{
+  display: none;
+}
 .tradingPair .childrenContainer{
   display: flex;
   justify-content: flex-start;
@@ -57,6 +63,12 @@
 .nowPrice .subPrice{
   font-size:12px;
 }
+.statValue--green{
+  color:#2FBD84 !important;
+}
+.statValue--red{
+  color:red !important;
+}
 
 /* Phần state  */
 .tradingStats{
@@ -85,6 +97,9 @@
   display: flex;
   align-items: center;
 }
+.statValue--yellow{
+  color:#E9C984;
+}
 .statValue a:not(:last-child)::after{
   content: "|";
   margin: 0 4px;
@@ -95,3 +110,107 @@
     width: 100%;
   }
 }
+
+@media (max-width: 768px){
+  .tradingPair{
+    height: 155px;
+    align-items: stretch;
+    flex-direction: column;
+    padding: 12px 16px;
+  }
+  .tradingPair .childrenContainer .FavoritePairCoin{
+    display: none;
+  }
+  .tradingPair .childrenContainer{
+    display: flex;
+    flex-direction: row;
+    margin-top: 0;
+    height: 25px;
+    align-items: flex-start;
+    margin-bottom: 5px  ;
+  }
+  
+  .tradingPair .childrenContainer .namePairCoin{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+  }
+  .tradingPair .childrenContainer .namePairCoin .linkPairCoin{
+    color:#E9C984;
+    font-size: 10px;
+  }
+  .pairCoin{
+    display: flex;
+    align-items: center;
+    gap:3px;
+  }
+  .dropdownCoin{
+    line-height: 1;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  .tradingStats2{
+    display: flex;
+    width: 100%;
+  }
+  .tradingStats2 .box_1{
+    flex: 70%;
+  overflow: hidden;
+
+  } 
+  .tradingStats2 .box_1 .nowPrice2 .showPrice2{
+    font-size:20px;
+    color:#2FBD84;
+       margin-bottom: 5px;
+  }
+  .tradingStats2 .box_1 .nowPrice2 .subPrice2{
+    font-size:12px;
+  }
+  .subPrice2{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .tag-text{
+    font-size: 10px;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .Chain{
+    display: flex ;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+    margin-top: 5px;
+    white-space: nowrap;
+  }
+
+  .tradingStats2 .box_2{
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 3px;
+  }
+  .tradingStats2 .box_2 .statItem .statLabel{
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .tradingStats2 .box_2 .statItem .statValue{
+    font-size: 12px;
+  }
+
+
+  .nowPrice{
+    display: none;
+  }
+  .tradingStats{
+    display: none;
+  }
+} 

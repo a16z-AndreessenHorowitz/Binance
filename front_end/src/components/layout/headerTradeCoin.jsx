@@ -1,6 +1,15 @@
 import "./headerTradeCoin.css";
 import binanceLogo from "../../assets/images/binance.png";
+
+function handleTheme(e){
+  e.preventDefault()
+  document.body.classList.toggle("dark-theme")
+}
+
+
+
 function HeaderTradeCoin() {
+
   return <>
   <header className="headerTradeCoin d-flex">
   <div className="container-fluid">
@@ -34,7 +43,7 @@ function HeaderTradeCoin() {
         <li><a href="#"><i className="fa-solid fa-earth-americas"></i></a></li>
         <li><a href="#"><i className="fa-solid fa-circle-question"></i></a></li>
         <li><a href="#"><i className="fa-solid fa-gear"></i></a></li>
-        <li><a href="#"><i className="fa-solid fa-moon"></i></a></li>
+        <li><a href="#" onClick={handleTheme}><i className="fa-solid fa-moon"></i></a></li>
       </ul>
     </nav>
 

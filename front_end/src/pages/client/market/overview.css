@@ -1,0 +1,82 @@
+.market-view{
+  padding:0 110px;
+}
+.marketStatus{
+  padding: 20px 12px;
+  color: #8c8c8c;
+}
+.marketStatus--error{
+  color: #f6465d;
+}
+.market-view .listCoin{
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 12px; 
+}
+.market-view .listCoin:hover{
+  border-radius: 8px;
+  background-color: #FAFAFA;
+}
+.market-view .listCoin .infoCoin{
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.market-view .listCoin .infoCoin .box_info{
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.market-view .listCoin .infoCoin .box_info img{
+  width: 24px;
+  height: 24px;
+  margin-right: 7px;
+}
+
+.market-view .listCoin .priceCoin{
+  flex: 0 0 15%;
+  text-align: right;
+}
+.market-view .listCoin .priceCoin .showPrice{
+  font-size: 16px;
+}
+.market-view .listCoin .priceCoin .subPrice{
+  font-size: 12px;
+}
+.market-view .listCoin .percentChange{
+  flex: 0 0 15%;
+  text-align: right;
+  font-size: 16px;
+}
+.market-view .listCoin .Volume24h{
+  flex: 0 0 15%;
+  text-align: right;
+  font-size: 16px;
+}
+.market-view .listCoin .marketcap{
+  flex: 0 0 15%;
+  text-align: right;
+  font-size: 16px;
+}
+.market-view .listCoin .takking_action{
+  flex: 0 0 15%;
+  text-align: right;
+  font-size: 16px;
+  gap:10px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px;
+  gap: 28px;
+}
+.market-view .listCoin .takking_action i{
+  width: 20px;
+  height: 20px;
+  font-size: 16px;
+}
+.statValue--green{
+  color:#2FBD84 !important;
+}
+.statValue--red{
+  color:red !important;
+}

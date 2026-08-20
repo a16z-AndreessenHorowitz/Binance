@@ -14,6 +14,18 @@ body,
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
+  font-weight: 100;
 }
 
+body.dark-theme{
+  background-color: #181A21;
+  color: #fff;
+}
+  
+body.dark-theme .headerTradeCoin {
+  border-bottom-color: #0A0E11;
+}
+body.dark-theme .tradingPair {
+  border-color: #0A0E11;
+}

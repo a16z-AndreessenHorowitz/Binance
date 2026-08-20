@@ -1,10 +1,13 @@
 import HeaderTradeCoin from "../../../components/layout/headerTradeCoin";
-import TradingPairCoin from "../../../components/layout/tradingPairCoin";
+import Overview from "../market/overview";
+ 
+
 function TradePage() {
+
   return (
     <div>
       <HeaderTradeCoin />
-      <TradingPairCoin />
+      <Overview/>
     </div>
   );
 }
