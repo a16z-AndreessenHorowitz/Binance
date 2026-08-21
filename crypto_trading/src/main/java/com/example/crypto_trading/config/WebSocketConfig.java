@@ -26,6 +26,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
             .setAllowedOrigins("http://localhost:5173");
     }
 
+    // StandardWebSocketClient là một WebSocket client cho phép ứng dụng Spring của bạn kết nối đến một WebSocket Server.
+    // Sử dụng để kết nối đến các API WebSocket bên ngoài (như Binance, Bybit, v.v.) để nhận dữ liệu real-time
   @Bean
   public WebSocketClient webSocketClient(){
     return new StandardWebSocketClient();

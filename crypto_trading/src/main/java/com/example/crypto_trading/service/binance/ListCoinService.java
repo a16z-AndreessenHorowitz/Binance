@@ -1,39 +1,56 @@
 package com.example.crypto_trading.service.binance;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
+import com.example.crypto_trading.dto.binance.BinanceTickerDTO;
 import com.example.crypto_trading.response.ListCoinGeckoMarketResponse;
 import com.example.crypto_trading.response.ListCoinMarketResponse;
 import com.example.crypto_trading.websocket.BinanceWebSocketClient;
 
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class ListCoinService {
   private static final int DEFAULT_LIMIT = 30;
   private static final int MAX_LIMIT = 100;
 
   private final ListCoinGeckoClient listCoinGeckoClient;
   private final BinanceWebSocketClient binanceWebSocketClient;
-  private final BinanceService binanceService;
+  private final RestClient restClient;
+
+  // Cache danh sách symbol có thể giao dịch từ Binance
+  private volatile Set<String> tradableSymbols;
+
+  public ListCoinService(
+      ListCoinGeckoClient listCoinGeckoClient,
+      BinanceWebSocketClient binanceWebSocketClient,
+      @Qualifier("binanceClient") RestClient restClient) {
+    this.listCoinGeckoClient = listCoinGeckoClient;
+    this.binanceWebSocketClient = binanceWebSocketClient;
+    this.restClient = restClient;
+  }
 
   public List<ListCoinMarketResponse> getCoins(int page, Integer limit) {
     int safePage = Math.max(page, 1);
     int safeLimit = normalizeLimit(limit);
-    //Gọi API của listCoinGeckoClient để lấy danh sách coin
-    List<ListCoinGeckoMarketResponse> coins = listCoinGeckoClient.getMarketCoins(safePage, safeLimit);
-    //chuyển đổi dữ liệu sang response của ứng dụng
 
-    // Lấy danh sách Binance symbol từ các coin
+    // Gọi API của listCoinGeckoClient để lấy danh sách coin
+    List<ListCoinGeckoMarketResponse> coins = listCoinGeckoClient.getMarketCoins(safePage, safeLimit);
+
+    // Chuyển đổi dữ liệu sang response của ứng dụng
     List<ListCoinMarketResponse> response = coins.stream()
         .map(this::toMarketResponse)
         .toList();
-        
-    //lọc ra các symbol của binance để kết nối websocket
+
+    // Lọc ra các symbol của Binance để kết nối WebSocket
     List<String> binanceSymbols = response.stream()
         .map(ListCoinMarketResponse::getBinanceSymbol)
         .filter(Objects::nonNull)
@@ -41,22 +58,23 @@ public class ListCoinService {
 
     // Kết nối WebSocket để nhận dữ liệu real-time
     binanceWebSocketClient.connect(binanceSymbols);
-    
+
     return response;
   }
 
-  //xử lý limit
+  // Xử lý limit
   private int normalizeLimit(Integer limit) {
     if (limit == null) {
-      return DEFAULT_LIMIT; //30
+      return DEFAULT_LIMIT; // 30
     }
     return Math.max(1, Math.min(limit, MAX_LIMIT));
   }
 
-  //toMarketResponse() - Chuyển đổi dữ liệu
+  // Chuyển đổi dữ liệu CoinGecko → response của ứng dụng
   private ListCoinMarketResponse toMarketResponse(ListCoinGeckoMarketResponse coin) {
-    String symbol = coin.getSymbol().toUpperCase();
-    String binanceSymbol = toBinanceSymbol(symbol);
+    String rawSymbol = coin.getSymbol();
+    String symbol = rawSymbol != null ? rawSymbol.toUpperCase() : "";
+    String binanceSymbol = symbol.isEmpty() ? null : toBinanceSymbol(symbol);
 
     return ListCoinMarketResponse.builder()
         .id(coin.getId())
@@ -69,14 +87,44 @@ public class ListCoinService {
         .build();
   }
 
-  //toBinanceSymbol() - Tạo symbol Binance
+  // Tạo Binance symbol (e.g. BTC → BTCUSDT), trả về null nếu không giao dịch được
   private String toBinanceSymbol(String symbol) {
-    // Nếu là USDT thì không có symbol
     if ("USDT".equals(symbol)) {
       return null;
     }
-
     String binanceSymbol = symbol + "USDT";
-    return binanceService.isTradableSymbol(binanceSymbol) ? binanceSymbol : null;
+    return isTradableSymbol(binanceSymbol) ? binanceSymbol : null;
+  }
+
+  // Kiểm tra symbol có đang được giao dịch trên Binance không
+  private boolean isTradableSymbol(String symbol) {
+    return getTradableSymbols().contains(symbol);
+  }
+
+  // Lấy danh sách symbol từ Binance API (lazy load + cache)
+  private Set<String> getTradableSymbols() {
+    if (tradableSymbols != null) {
+      return tradableSymbols;
+    }
+
+    List<BinanceTickerDTO> response = restClient.get()
+        .uri("/api/v3/ticker/24hr")
+        .retrieve()
+        .body(new ParameterizedTypeReference<List<BinanceTickerDTO>>() {});
+
+    if (response == null) {
+      return Collections.emptySet();
+    }
+
+    // ConcurrentHashMap.newKeySet() — thread-safe khi nhiều request đến cùng lúc
+    Set<String> symbols = ConcurrentHashMap.newKeySet();
+    response.forEach(ticker -> {
+      if (ticker.getSymbol() != null) {
+        symbols.add(ticker.getSymbol());
+      }
+    });
+
+    tradableSymbols = symbols;
+    return tradableSymbols;
   }
 }

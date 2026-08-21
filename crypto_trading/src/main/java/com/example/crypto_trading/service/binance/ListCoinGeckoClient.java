@@ -3,6 +3,7 @@ package com.example.crypto_trading.service.binance;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -18,6 +19,8 @@ public class ListCoinGeckoClient {
     this.restClient = restClient;
   }
 
+  // Cache kết quả 5 phút — tránh gọi lại CoinGecko liên tục và bị rate limit (429)
+  @Cacheable(value = "coinGeckoMarkets", key = "#page + '-' + #limit")
   public List<ListCoinGeckoMarketResponse> getMarketCoins(int page, int limit) {
     List<ListCoinGeckoMarketResponse> coins = restClient.get()
         .uri(uriBuilder -> uriBuilder

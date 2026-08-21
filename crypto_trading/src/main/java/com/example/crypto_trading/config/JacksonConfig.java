@@ -11,6 +11,7 @@ public class JacksonConfig {
   @Bean
   public ObjectMapper objectMapper() {
     ObjectMapper mapper = new ObjectMapper();
+    // nếu chuyển qua fileds mà không có trường đó thì không báo lỗi 
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     return mapper;
   }
