@@ -17,11 +17,14 @@ function formatMoney(value) {
   });
 }
 function formatPrice(price) {
-  return Number(price).toLocaleString("en-US", {
-    minimumFractionDigits: 2,// tối đa hai số sau dấu thập phân
-    maximumFractionDigits: 2,//tối đa hiển thị 2 số sau thập phần
-  });
+  if (price >= 1000)     return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (price >= 1)        return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (price >= 0.01)     return price.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+  if (price >= 0.0001)   return price.toLocaleString('en-US', { minimumFractionDigits: 6, maximumFractionDigits: 6 });
+  return price.toLocaleString('en-US', { minimumFractionDigits: 8, maximumFractionDigits: 8 });
 }
+
+
 
 function formatPriceChangePercent(priceChangePercent) {
   const number=Number(priceChangePercent)
