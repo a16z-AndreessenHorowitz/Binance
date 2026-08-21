@@ -37,12 +37,6 @@ public class ListCoinTickerStreamService {
       //gửi dữ liệu đến client đang subscribe thông qua websocket c
       messagingTemplate.convertAndSend("/topic/list-coins/ticker", ticker);
 
-      log.info(
-          "Symbol: {}, Price: {}, Change: {}%, Volume: {}",
-          ticker.getSymbol(),
-          ticker.getPrice(),
-          ticker.getPriceChangePercent(),
-          ticker.getQuoteVolume());
     } catch (Exception e) {
       log.error(
           "Cannot parse Binance message: {}",
