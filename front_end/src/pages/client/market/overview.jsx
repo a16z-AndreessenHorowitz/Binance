@@ -41,7 +41,7 @@ function formatPriceChangePercent(priceChangePercent) {
   return `${formatted}%`;
 }
 
-function Overview() {
+function OverView() {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -54,7 +54,7 @@ function Overview() {
         setLoading(true);
         setErrorMessage("");
 
-        const data = await getListCoin(1, 30);
+        const data = await getListCoin(1, 50);
         console.log("LIST COIN:", data);
 
         if (!ignore) { //() đúng mới chạy cho nên !ignore ở đây ra true
@@ -96,7 +96,6 @@ function Overview() {
       stopListCoinSocket();
     };
   }, []);
-
 
 
 
@@ -155,4 +154,4 @@ function Overview() {
   </>;
 }
 
-export default Overview;
+export default OverView;

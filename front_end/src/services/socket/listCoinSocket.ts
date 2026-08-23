@@ -22,6 +22,7 @@ export function startListCoinSocket(onTicker: (ticker: any) => void) {
 
   const previousOnConnect = stompClient.onConnect;
   stompClient.onConnect = (frame) => {
+    // Nếu previousOnConnect có tồn tại thì gọi hàm onConnect cũ.
     previousOnConnect?.(frame);
     console.log("LIST COIN SOCKET: STOMP connected");
     subscribeListCoinTicker();
@@ -39,3 +40,21 @@ export function startListCoinSocket(onTicker: (ticker: any) => void) {
     stompClient.onConnect = previousOnConnect;
   };
 }
+// trong đoạn return 
+// Nhớ đoạn trước:
+
+// const previousOnConnect = stompClient.onConnect;
+
+// Sau đó bạn đã thay onConnect:
+
+// stompClient.onConnect = (frame) => {
+//   previousOnConnect?.(frame);
+
+//   subscribeListCoinTicker();
+// };
+
+// Khi cleanup:
+
+// stompClient.onConnect = previousOnConnect;
+
+// để trả lại onConnect ban đầu.

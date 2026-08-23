@@ -1,8 +1,6 @@
-import "./tradingPairCoin.css";
+import "./tradeHeader.css";
 
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectTickerBySymbol, setTicker } from "../../redux/tickerSlice";
+import { useState } from "react";
 
 
 function formatPrice(price) {
@@ -31,10 +29,9 @@ function formatPriceChange(price) {
   });
 }
 
-function TradingPairCoin() {
+function TradeHeader() {
   const symbol = "BTCUSDT";
-  const dispatch = useDispatch();
-  const ticker = useSelector((state) => selectTickerBySymbol(state, symbol));
+  const [ticker, setTicker] = useState(null);
 
   const [imageCoin, setImageCoin] = useState("");
   const showPrice = ticker?.lastPrice ? formatPrice(ticker.lastPrice) : "00,000.00";
@@ -183,4 +180,4 @@ return <>
 </>
 }
 
-export default TradingPairCoin;
+export default TradeHeader;
