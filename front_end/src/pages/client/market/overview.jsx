@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "./overview.css"
 import { getListCoin } from "../../../services/api/api";
 import { startListCoinSocket } from "../../../services/socket/listCoinSocket";
-
+import { useNavigate } from "react-router-dom";
 function formatMoney(value) {
   if (value === null || value === undefined) {
     return "--";
@@ -45,6 +45,12 @@ function OverView() {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate=useNavigate()
+
+  //navigate
+  function NavigateCoin(binanceSymbol){
+    navigate(`/trade/${binanceSymbol}?type=spot`)
+  }
 
   useEffect(() => {
     let ignore = false;
@@ -74,6 +80,10 @@ function OverView() {
     }
 
     fetchData();
+
+    //Cái (ticker) => {} là callback function. Khi WebSocket nhận được dữ liệu mới, 
+    //startListCoinSocket sẽ gọi callback này và truyền dữ liệu vào ticker.
+
     const stopListCoinSocket = startListCoinSocket((ticker) => {
       // ticker = { symbol: "BTCUSDT", price: 69187.55, priceChangePercent: 7.42, quoteVolume: 2125484288.60 }
       setCoins((prevCoins) =>
@@ -107,7 +117,9 @@ function OverView() {
       {errorMessage && <div className="marketStatus marketStatus--error">{errorMessage}</div>}
 
       {!loading && !errorMessage && coins.map((coin) => (
-        <div className="listCoin" key={coin.id}>
+        <div className="listCoin" key={coin.id} onClick={()=>{
+          NavigateCoin(coin.binanceSymbol)
+        }}>
             {/* box info  */}
             <div className="infoCoin">
               <div className="box_info">

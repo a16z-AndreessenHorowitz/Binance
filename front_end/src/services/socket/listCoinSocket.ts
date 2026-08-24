@@ -1,9 +1,13 @@
 import stompClient from "./stompClient";
 
 export function startListCoinSocket(onTicker: (ticker: any) => void) {
+
+  // Biến này dùng để lưu listCoinSubscription hiện tại.
   let listCoinSubscription: { unsubscribe: () => void } | undefined;
 
   function subscribeListCoinTicker() {
+
+    // Kiểm tra xem subscribe chưa nếu đã có subscription rồi thì return không subscrbile lần nữa
     if (listCoinSubscription) {
       return;
     }
@@ -27,7 +31,7 @@ export function startListCoinSocket(onTicker: (ticker: any) => void) {
     console.log("LIST COIN SOCKET: STOMP connected");
     subscribeListCoinTicker();
   };
-
+  //kiểm tra xem stomp đã kết nối chưa
   if (!stompClient.active) {
     console.log("LIST COIN SOCKET: activating STOMP client");
     stompClient.activate();

@@ -52,7 +52,7 @@ return <>
         <i className="fa-regular fa-star"></i>
       </div>
       <div className="imagePairCoin">
-        <img src={imageCoin || ""} alt="Coin Image" />
+        <img src={imageCoin || null } alt="Coin Image" />
       </div>
         <div className="namePairCoin">
           <div className="pairCoin">

@@ -1,13 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import OverView from "../pages/client/market/overview";
+import TradeSpot from "../pages/client/trade/tradeSpot";
 
 function AppRoutes() {
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/markets/overview" element={<OverView />} />
+        <Route path="/trade/:symbol" element={<TradeSpot/>}/>
       </Routes>
-    </BrowserRouter>
   );
 }
 
