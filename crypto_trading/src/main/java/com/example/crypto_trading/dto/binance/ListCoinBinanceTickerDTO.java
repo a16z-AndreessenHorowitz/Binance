@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BinanceTickerDTO {
+public class ListCoinBinanceTickerDTO {
   private String symbol;
   private String priceChange;
   private String priceChangePercent;

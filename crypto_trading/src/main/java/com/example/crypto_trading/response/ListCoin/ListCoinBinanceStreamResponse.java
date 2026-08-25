@@ -1,4 +1,4 @@
-package com.example.crypto_trading.response;
+package com.example.crypto_trading.response.ListCoin;
 
 import lombok.Data;
 

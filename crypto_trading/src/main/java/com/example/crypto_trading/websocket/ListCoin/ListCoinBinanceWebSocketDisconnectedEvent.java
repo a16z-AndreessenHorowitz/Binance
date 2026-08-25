@@ -1,4 +1,4 @@
-package com.example.crypto_trading.websocket;
+package com.example.crypto_trading.websocket.ListCoin;
 
 // ó chỉ là một “gói tin thông báo” nội bộ trong Spring.
 // Hiểu đơn giản:
@@ -11,5 +11,5 @@ package com.example.crypto_trading.websocket;
 //   -> reconnect lại
 // record trong Java tự tạo sẵn cho bạn:
 
-public record BinanceWebSocketDisconnectedEvent(String reason) {
+public record ListCoinBinanceWebSocketDisconnectedEvent(String reason) {
 }

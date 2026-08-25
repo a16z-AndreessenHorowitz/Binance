@@ -1,4 +1,4 @@
-package com.example.crypto_trading.websocket;
+package com.example.crypto_trading.websocket.ListCoin;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BinanceWebSocketClient {
+public class ListCoinBinanceWebSocketClient {
   private final WebSocketClient webSocketClient; //nó nằm bên config kết nối ra ngoàu websocket của binance
   private final ListCoinBinanceWebSocketHandler listCoinBinanceWebSocketHandler;
   private final ScheduledExecutorService reconnectExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -93,7 +93,7 @@ public class BinanceWebSocketClient {
   }
 
   @EventListener
-  public void reconnect(BinanceWebSocketDisconnectedEvent event) {
+  public void reconnect(ListCoinBinanceWebSocketDisconnectedEvent event) {
     log.info("Scheduling Binance WebSocket reconnect: {}", event.reason());
     scheduleReconnect();
   }

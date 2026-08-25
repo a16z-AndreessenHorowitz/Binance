@@ -1,4 +1,4 @@
-package com.example.crypto_trading.websocket;
+package com.example.crypto_trading.websocket.ListCoin;
 
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.example.crypto_trading.service.binance.ListCoinTickerStreamService;
+import com.example.crypto_trading.service.binance.ListCoin.ListCoinTickerStreamService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,58 +22,47 @@ public class ListCoinBinanceWebSocketHandler extends TextWebSocketHandler {
 
   @Override
   public void afterConnectionEstablished(
-      WebSocketSession session
-  ) {
+      WebSocketSession session) {
     log.info(
         "Connected to Binance list coin WebSocket: {}",
-        session.getId()
-    );
+        session.getId());
   }
 
-  //nhận dữ liệu từ binance quan trọng nó chạy mỗi khi binance gửi dữ liệu mới
+  // nhận dữ liệu từ binance quan trọng nó chạy mỗi khi binance gửi dữ liệu mới
   @Override
   protected void handleTextMessage(
       WebSocketSession session,
-      TextMessage message
-  ) {
-    tickerStreamService.publishTicker(message.getPayload()); 
+      TextMessage message) {
+    tickerStreamService.publishTicker(message.getPayload());
   }
 
-  //lỗi kết nối
+  // lỗi kết nối
   @Override
   public void handleTransportError(
       WebSocketSession session,
-      Throwable exception
-  ) {
+      Throwable exception) {
     log.error(
         "Binance list coin WebSocket transport error",
-        exception
-    );
+        exception);
 
     eventPublisher.publishEvent(
-        new BinanceWebSocketDisconnectedEvent(
-            exception.getMessage()
-        )
-    );
+        new ListCoinBinanceWebSocketDisconnectedEvent(
+            exception.getMessage()));
   }
 
-  //ngắt kết nối
+  // ngắt kết nối
   @Override
   public void afterConnectionClosed(
       WebSocketSession session,
-      CloseStatus closeStatus
-  ) {
+      CloseStatus closeStatus) {
 
     log.info(
         "Disconnected from Binance list coin WebSocket: {}",
-        closeStatus
-    );
+        closeStatus);
 
     eventPublisher.publishEvent(
-        new BinanceWebSocketDisconnectedEvent(
-            closeStatus.toString()
-        )
-    );
+        new ListCoinBinanceWebSocketDisconnectedEvent(
+            closeStatus.toString()));
   }
 
 }

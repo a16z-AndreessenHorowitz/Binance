@@ -5,11 +5,8 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
-import com.example.crypto_trading.response.ListCoinMarketResponse;
-
-import com.example.crypto_trading.service.binance.ListCoinService;
+import com.example.crypto_trading.response.ListCoin.ListCoinMarketResponse;
+import com.example.crypto_trading.service.binance.ListCoin.ListCoinService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/binance")
-public class BinanceController {
+public class ListCoinController {
 
   private final ListCoinService listCoinService;
-
-
 
   @GetMapping("/list-coins")
   public List<ListCoinMarketResponse> getListCoins(
@@ -32,4 +27,6 @@ public class BinanceController {
   ) {
     return listCoinService.getCoins(page, limit);
   }
+
+  
 }

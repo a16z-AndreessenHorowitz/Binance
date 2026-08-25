@@ -1,4 +1,4 @@
-package com.example.crypto_trading.service.binance;
+package com.example.crypto_trading.service.binance.ListCoin;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,11 +11,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import com.example.crypto_trading.dto.binance.BinanceTickerDTO;
-import com.example.crypto_trading.response.ListCoinGeckoMarketResponse;
-import com.example.crypto_trading.response.ListCoinMarketResponse;
-import com.example.crypto_trading.websocket.BinanceWebSocketClient;
-
+import com.example.crypto_trading.dto.binance.ListCoinBinanceTickerDTO;
+import com.example.crypto_trading.response.ListCoin.ListCoinGeckoMarketResponse;
+import com.example.crypto_trading.response.ListCoin.ListCoinMarketResponse;
+import com.example.crypto_trading.websocket.ListCoin.ListCoinBinanceWebSocketClient;
 
 @Service
 public class ListCoinService {
@@ -23,7 +22,7 @@ public class ListCoinService {
   private static final int MAX_LIMIT = 100;
 
   private final ListCoinGeckoClient listCoinGeckoClient;
-  private final BinanceWebSocketClient binanceWebSocketClient;
+  private final ListCoinBinanceWebSocketClient binanceWebSocketClient;
   private final RestClient restClient;
 
   // Cache danh sách symbol có thể giao dịch từ Binance
@@ -31,7 +30,7 @@ public class ListCoinService {
 
   public ListCoinService(
       ListCoinGeckoClient listCoinGeckoClient,
-      BinanceWebSocketClient binanceWebSocketClient,
+      ListCoinBinanceWebSocketClient binanceWebSocketClient,
       @Qualifier("binanceClient") RestClient restClient) {
     this.listCoinGeckoClient = listCoinGeckoClient;
     this.binanceWebSocketClient = binanceWebSocketClient;
@@ -107,10 +106,11 @@ public class ListCoinService {
       return tradableSymbols;
     }
 
-    List<BinanceTickerDTO> response = restClient.get()
+    List<ListCoinBinanceTickerDTO> response = restClient.get()
         .uri("/api/v3/ticker/24hr")
         .retrieve()
-        .body(new ParameterizedTypeReference<List<BinanceTickerDTO>>() {});
+        .body(new ParameterizedTypeReference<List<ListCoinBinanceTickerDTO>>() {
+        });
 
     if (response == null) {
       return Collections.emptySet();

@@ -1,11 +1,11 @@
-package com.example.crypto_trading.service.binance;
+package com.example.crypto_trading.service.binance.ListCoin;
 
 import org.springframework.stereotype.Service;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import com.example.crypto_trading.response.ListCoinBinanceStreamResponse;
-import com.example.crypto_trading.response.ListCoinBinanceTickerResponse;
+import com.example.crypto_trading.response.ListCoin.ListCoinBinanceStreamResponse;
+import com.example.crypto_trading.response.ListCoin.ListCoinBinanceTickerResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;

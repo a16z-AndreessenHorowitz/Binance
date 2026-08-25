@@ -1,4 +1,4 @@
-package com.example.crypto_trading.service.binance;
+package com.example.crypto_trading.service.binance.ListCoin;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import com.example.crypto_trading.response.ListCoinGeckoMarketResponse;
+import com.example.crypto_trading.response.ListCoin.ListCoinGeckoMarketResponse;
 
 // Gọi API CoinGecko để lấy danh sách coin theo thị trường (market cap)
 @Service
