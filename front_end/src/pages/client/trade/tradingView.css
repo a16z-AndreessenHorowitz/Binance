@@ -1,5 +1,6 @@
 .trading-view {
-  min-width: 750px;
+  min-width: 525px;
+  width: 58vw;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -176,12 +177,7 @@
   font-weight: 700;
 }
 
-.kline-container {
-  width: 100%;
-  flex-grow: 1;
-  min-height: 480px;
-  cursor: crosshair;
-}
+
 
 
 .chart-wrapper {
@@ -189,6 +185,7 @@
   width: 100%;
   flex-grow: 1;
   align-items: center;
+  height: 460px;
 }
 
 .chart-title-row {
@@ -247,6 +244,13 @@ body.dark-theme .show-chart-title-row {
   justify-content: center;
   font-size: 10px;
   z-index: 10;
+}
+.kline-container {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  min-height: 0px;
+  cursor: crosshair;
 }
 /* dark theme */
 
@@ -324,4 +328,61 @@ body.dark-theme .view-mode-btn:hover {
 
 body.dark-theme .view-mode-btn.active {
   color: #ffffff;
+}
+
+@media (max-width:1024px) {
+  .trading-view{
+    width: 65vw;
+    min-height: unset; /* Bỏ min-height: 520px ban đầu */
+    height: 400px;
+  }
+  .chart-wrapper {
+  flex: 1;           /* Tự động lấp đầy phần còn lại của .trading-view */
+  min-height: 0;     /* Quan trọng để flex child có thể co nhỏ lại */
+  }
+  .toolbar-right-trading,
+  .toolbar-right-detail{
+    display: none;
+  }
+}
+
+@media (max-width: 768px){
+  .trading-view {
+    width: 100%;
+    min-width: 0;
+    min-height: unset;
+    height: 600px;
+  }
+  .coinInfoTable{
+    min-width: 60px;
+    /* overflow: hidden; */
+    width: 100%;
+
+  }
+  .coinInfoTable .tablist{
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .chart-wrapper {
+    flex-grow: 1;
+    min-height: 0;
+    height: auto;
+  }
+  .kline-container{
+    width: 100%;
+    height: 100%;
+  }
+  .chart-title-row{
+    width: 90%;
+    gap:3px;
+  }
+  .chart-toolbar .toolbar-left {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .chart-toolbar .toolbar-left .tools-list{
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }

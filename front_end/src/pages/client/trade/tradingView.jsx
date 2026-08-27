@@ -391,13 +391,13 @@ function TradingView({ symbol }) {
             Gốc
           </button>
           <button
-            className={`view-mode-btn ${activeViewMode === "tradingview" ? "active" : ""}`}
+            className={`view-mode-btn toolbar-right-trading  ${activeViewMode === "tradingview" ? "active" : ""}`}
             onClick={() => setActiveViewMode("tradingview")}
           >
             Trading View
           </button>
           <button
-            className={`view-mode-btn ${activeViewMode === "detail" ? "active" : ""}`}
+            className={`view-mode-btn toolbar-right-detail ${activeViewMode === "detail" ? "active" : ""}`}
             onClick={() => setActiveViewMode("detail")}
           >
             Chi tiết
