@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import com.example.crypto_trading.response.ListCoin.ListCoinBinanceStreamResponse;
-import com.example.crypto_trading.response.ListCoin.ListCoinBinanceTickerResponse;
+import com.example.crypto_trading.dto.binance.ListCoin.ListCoinBinanceStreamDTO;
+import com.example.crypto_trading.dto.binance.ListCoin.ListCoinBinanceWsTickerDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,9 @@ public class ListCoinTickerStreamService {
   public void publishTicker(String payload) {
     try {
       //parse JSON thành java object
-      ListCoinBinanceStreamResponse response = objectMapper.readValue(payload, ListCoinBinanceStreamResponse.class);
+      ListCoinBinanceStreamDTO response = objectMapper.readValue(payload, ListCoinBinanceStreamDTO.class);
       //lấy dữ liệu từ java object
-      ListCoinBinanceTickerResponse ticker = response.getData();
+      ListCoinBinanceWsTickerDTO ticker = response.getData();
 
       //kiểm tra xem có dữ liệu không
       if (ticker == null || ticker.getSymbol() == null) {

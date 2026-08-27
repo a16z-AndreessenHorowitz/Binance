@@ -1,0 +1,7 @@
+.trade-main-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: flex-start;
+  gap:1px;
+}

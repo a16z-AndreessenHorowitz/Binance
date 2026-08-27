@@ -1,22 +1,22 @@
-import stompClient from "./stompClient";
+import stompClient, { onStompConnect } from "./stompClient";
 
 export function startOrderBookSocket(
   symbol: string,
   onOrderBook: (orderBook: any) => void
 ) {
-  // Biến này dùng để lưu orderBookSubscription hiện tại.
   let orderBookSubscription: { unsubscribe: () => void } | undefined;
 
-  // Chuẩn hóa symbol: "BTC_USDT" hoặc "BTCUSDT" -> "BTCUSDT"
   const cleanSymbol = symbol ? symbol.replace(/[^a-zA-Z0-9]/g, "").toUpperCase() : "";
 
+  if (!cleanSymbol) return () => {};
+
+  const topic = `/topic/order-book/${cleanSymbol}`;
+
   function subscribeOrderBook() {
-    // Kiểm tra xem subscribe chưa nếu đã có subscription rồi hoặc chưa có symbol thì return
-    if (orderBookSubscription || !cleanSymbol) {
+    if (orderBookSubscription || !cleanSymbol || !stompClient.connected) {
       return;
     }
 
-    const topic = `/topic/order-book/${cleanSymbol}`;
     console.log(`ORDER BOOK SOCKET: subscribing ${topic}`);
 
     orderBookSubscription = stompClient.subscribe(topic, (message) => {
@@ -25,20 +25,11 @@ export function startOrderBookSocket(
     });
   }
 
-  // Nếu STOMP đã connected thì subscribe ngay
-  if (stompClient.connected) {
+  // Đăng ký callback khi kết nối STOMP
+  const unregisterConnect = onStompConnect(() => {
     subscribeOrderBook();
-  }
+  });
 
-  const previousOnConnect = stompClient.onConnect;
-  stompClient.onConnect = (frame) => {
-    // Nếu previousOnConnect có tồn tại thì gọi hàm onConnect cũ.
-    previousOnConnect?.(frame);
-    console.log("ORDER BOOK SOCKET: STOMP connected");
-    subscribeOrderBook();
-  };
-
-  // Kiểm tra xem stomp đã activate chưa
   if (!stompClient.active) {
     console.log("ORDER BOOK SOCKET: activating STOMP client");
     stompClient.activate();
@@ -46,8 +37,35 @@ export function startOrderBookSocket(
 
   return () => {
     console.log(`ORDER BOOK SOCKET: unsubscribe /topic/order-book/${cleanSymbol}`);
+    unregisterConnect();
     orderBookSubscription?.unsubscribe();
     orderBookSubscription = undefined;
-    stompClient.onConnect = previousOnConnect;
   };
 }
+
+
+// giải thích vì sao stomp.onConnect cần gắn thêm hành động mới 
+// Vì stompClient là 1 object duy nhất dùng chung, nên stompClient.onConnect cũng chỉ có 1 chỗ để gán. Nếu màn hình A gán:
+
+// stompClient.onConnect = subscribeGiaCoin;
+
+// Sau đó màn hình B gán tiếp:
+
+// stompClient.onConnect = subscribeOrderBook;
+
+// → Cái gán sau sẽ ĐÈ MẤT cái gán trước! Bây giờ stompClient.onConnect chỉ còn chạy subscribeOrderBook, còn subscribeGiaCoin bị mất tiêu, không bao giờ được gọi nữa dù màn hình A vẫn đang hiển thị và cần nó.
+
+// Đây chính là vấn đề code đang cố tránh.
+
+
+
+
+// trong hàm return 
+// Trạng thái đầu:  onConnect = undefined
+//                         ↓
+// Gắn thêm:        onConnect = hàmA   (previousOnConnect đã lưu lại giá trị "undefined" từ trước)
+//                         ↓
+// Dọn dẹp (cleanup): onConnect = previousOnConnect  →  onConnect = undefined
+
+// Tức là: trạng thái đầu là gì thì lúc dọn dẹp trả về đúng y trạng thái đó — dù nó là undefined (chưa có ai gán) hay là 1 hàm thật (do màn hình khác gán trước đó).
+//  Code không quan tâm giá trị cụ thể là gì, nó chỉ đơn giản là "chụp ảnh lại trước khi sửa" rồi "khôi phục ảnh đó khi xong việc" — nguyên tắc chung là vậy, áp dụng cho mọi trường hợp.

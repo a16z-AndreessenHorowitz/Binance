@@ -1,14 +1,9 @@
 import "./tradeHeader.css";
+import { useEffect, useState, useRef } from "react";
+import { getCoinTicker } from "../../services/api/api";
+import { startTickerSocket } from "../../services/socket/tickerSocket";
+import formatPrice from "../../utils/formatPrice";
 
-import { useState } from "react";
-
-
-function formatPrice(price) {
-  return Number(price).toLocaleString("en-US", {
-    minimumFractionDigits: 2,// tối đa hai số sau dấu thập phân
-    maximumFractionDigits: 2,//tối đa hiển thị 2 số sau thập phần
-  });
-}
 function formatPercent(price) {
   const number=Number(price)
 
@@ -29,9 +24,13 @@ function formatPriceChange(price) {
   });
 }
 
-function TradeHeader() {
-  const symbol = "BTCUSDT";
+
+function TradeHeader({symbol , onPriceUpdate}) {
   const [ticker, setTicker] = useState(null);
+  //dùng để làm màu xanh đỏ cho price
+  const [priceDirection, setPriceDirection] = useState("up");
+  const prevPriceRef = useRef(null);
+  //
 
   const [imageCoin, setImageCoin] = useState("");
   const showPrice = ticker?.lastPrice ? formatPrice(ticker.lastPrice) : "00,000.00";
@@ -42,8 +41,53 @@ function TradeHeader() {
   const rawpriceChangePercent=ticker?.priceChangePercent ? ticker.priceChangePercent : "00.00%";
   //cái raw dùng làm css biến đọng 24h
   const volume=ticker?.volume ? formatPrice(ticker.volume) : "00,000.00";
-  const quoteVolume=ticker?.volume ? formatPrice(ticker.quoteVolume) : "00,000.00";
+  const quoteVolume=ticker?.quoteVolume ? formatPrice(ticker.quoteVolume) : "00,000.00";
 
+  useEffect(()=>{
+    if(!symbol) return;
+    //dùng để màu xanh đỏ giá price
+    setPriceDirection("up");
+    prevPriceRef.current = null;
+    //
+
+    console.log("Đang lắng nghe sổ lệnh cho ticker:", symbol);
+    
+    // 1. Báo cho Backend biết để Backend connect ra Binance WebSocket + lấy ảnh coin
+    getCoinTicker(symbol).then((data) => {
+      if (data?.imageUrl) {
+        setImageCoin(data.imageUrl);
+      }
+    });
+
+    const stopStickerSocket=startTickerSocket(symbol,(data)=>{
+      setTicker(data);
+      
+      //dùng để làm màu xanh đỏ cho price
+      if (data?.lastPrice) {
+        const nextPrice = Number(data.lastPrice);
+        if (prevPriceRef.current !== null) {
+          if (nextPrice > prevPriceRef.current) {
+            setPriceDirection("up");
+          } else if (nextPrice < prevPriceRef.current) {
+            setPriceDirection("down");
+          }
+        } else {
+          //giá đầu tiên là màu xanh
+          setPriceDirection("up");
+        }
+        prevPriceRef.current = nextPrice;
+      }
+      //cập nhật giá ra ngoài
+      onPriceUpdate(data.lastPrice);
+      //
+    })
+
+
+    //clean up
+    return ()=>{
+      stopStickerSocket();
+    };
+  },[symbol])
 
 return <>
   <div className="tradingPair">
@@ -56,15 +100,15 @@ return <>
       </div>
         <div className="namePairCoin">
           <div className="pairCoin">
-            BTC/USDT
+            {symbol}
             <i className="fa-solid fa-caret-down dropdownCoin"></i>
           </div>
           <div className="linkPairCoin">
-            Giá Bitcoin
+            Giá {symbol.substring(0,3)}
           </div>
       </div>
       <div className="nowPrice">
-        <div className="showPrice">
+        <div className={`showPrice ${priceDirection === "up" ? "statValue--green" : priceDirection === "down" ? "statValue--red" : ""}`}>
           {showPrice}
         </div>
         <div className="subPrice">
@@ -77,7 +121,9 @@ return <>
     <div className="tradingStats2">
       <div className="box_1">
         <div className="nowPrice2">
-          <div className="showPrice2">
+          {/* <div className={`showPrice2 ${priceDirection === "up" ? "statValue--green" : priceDirection === "down" ? "statValue--red" : ""}`}> */}
+          <div className={`showPrice2 ${priceDirection === "up" ? "price-up" : priceDirection === "down" ? "price-down" : ""}`}>
+
             {showPrice}
           </div>
           <div className="subPrice2">
@@ -114,7 +160,7 @@ return <>
       </div>
 
       <div className="statItem">
-        <div className="statLabel">Khối lượng 24h(BTC)</div>
+        <div className="statLabel">Khối lượng 24h({symbol ? symbol.toUpperCase().replace("USDT", "") : ""})</div>
         <div className="statValue">{volume}</div>
       </div>
 
@@ -146,7 +192,7 @@ return <>
       </div>
 
       <div className="statItem">
-        <div className="statLabel">Khối lượng 24h(BTC)</div>
+        <div className="statLabel">Khối lượng 24h({symbol ? symbol.toUpperCase().replace("USDT", "") : ""})</div>
         <div className="statValue">{volume}</div>
       </div>
 
@@ -157,7 +203,7 @@ return <>
 
       <div className="statItem">
         <div className="statLabel">Mạng lưới</div>
-        <div className="statValue">BTC (5)</div>
+        <div className="statValue">{symbol ? symbol.toUpperCase().replace("USDT", "") : ""} (5)</div>
       </div>
 
       <div className="statItem tokenItem">

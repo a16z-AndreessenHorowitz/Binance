@@ -3,8 +3,8 @@ package com.example.crypto_trading.service.binance.OrderBook;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import com.example.crypto_trading.response.OrderBook.OrderBookBinanceStreamResponse;
-import com.example.crypto_trading.response.OrderBook.OrderBookDepthResponse;
+import com.example.crypto_trading.dto.binance.orderbook.OrderBookBinanceStreamDTO;
+import com.example.crypto_trading.dto.binance.orderbook.OrderBookDepthDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -25,12 +25,12 @@ public class OrderBookStreamService {
    */
   public void publishOrderBook(String payload, String fallbackSymbol) {
     try {
-      OrderBookDepthResponse depthData;
+      OrderBookDepthDTO depthData;
       String currentSymbol = fallbackSymbol;
 
       // Kiểm tra xem payload có dạng bọc stream {"stream": "...", "data": {...}} không
       if (payload.contains("\"stream\"") && payload.contains("\"data\"")) {
-        OrderBookBinanceStreamResponse streamResponse = objectMapper.readValue(payload, OrderBookBinanceStreamResponse.class);
+        OrderBookBinanceStreamDTO streamResponse = objectMapper.readValue(payload, OrderBookBinanceStreamDTO.class);
         depthData = streamResponse.getData();
         if (streamResponse.getStream() != null) {
           // Lấy symbol từ stream ví dụ: "btcusdt@depth20@100ms" -> "BTCUSDT"
@@ -39,7 +39,7 @@ public class OrderBookStreamService {
         }
       } else {
         // Dạng payload trực tiếp: {"lastUpdateId": ..., "bids": [...], "asks": [...]}
-        depthData = objectMapper.readValue(payload, OrderBookDepthResponse.class);
+        depthData = objectMapper.readValue(payload, OrderBookDepthDTO.class);
       }
 
       if (depthData == null) {

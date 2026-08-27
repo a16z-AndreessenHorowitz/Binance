@@ -11,8 +11,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import com.example.crypto_trading.dto.binance.ListCoinBinanceTickerDTO;
-import com.example.crypto_trading.response.ListCoin.ListCoinGeckoMarketResponse;
+import com.example.crypto_trading.dto.binance.ListCoin.ListCoinBinanceTickerDTO;
+import com.example.crypto_trading.dto.coingecko.ListCoinGeckoMarketDTO;
 import com.example.crypto_trading.response.ListCoin.ListCoinMarketResponse;
 import com.example.crypto_trading.websocket.ListCoin.ListCoinBinanceWebSocketClient;
 
@@ -42,7 +42,7 @@ public class ListCoinService {
     int safeLimit = normalizeLimit(limit);
 
     // Gọi API của listCoinGeckoClient để lấy danh sách coin
-    List<ListCoinGeckoMarketResponse> coins = listCoinGeckoClient.getMarketCoins(safePage, safeLimit);
+    List<ListCoinGeckoMarketDTO> coins = listCoinGeckoClient.getMarketCoins(safePage, safeLimit);
 
     // Chuyển đổi dữ liệu sang response của ứng dụng
     List<ListCoinMarketResponse> response = coins.stream()
@@ -70,7 +70,7 @@ public class ListCoinService {
   }
 
   // Chuyển đổi dữ liệu CoinGecko → response của ứng dụng
-  private ListCoinMarketResponse toMarketResponse(ListCoinGeckoMarketResponse coin) {
+  private ListCoinMarketResponse toMarketResponse(ListCoinGeckoMarketDTO coin) {
     String rawSymbol = coin.getSymbol();
     String symbol = rawSymbol != null ? rawSymbol.toUpperCase() : "";
     String binanceSymbol = symbol.isEmpty() ? null : toBinanceSymbol(symbol);

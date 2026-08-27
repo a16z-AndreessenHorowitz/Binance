@@ -1,15 +1,21 @@
 .orderBook {
-  width: 28vw;
+  width: 22vw;
   height: auto;
-  min-height: 700px; /* Ít nhất là 700px, nhiều nội dung hơn thì tự giãn thêm */
+  min-height: 700px;
+  /* Ít nhất là 700px, nhiều nội dung hơn thì tự giãn thêm */
   border-radius: 8px;
-  border-top: 2px solid #f3f3f3;
-  border-left: 4px solid #f3f3f3;
-  border-right: 4px solid #f3f3f3;
-  border-bottom: 4px solid #f3f3f3;
+  border-top: 1px solid #eaecef;
+  border-left: 1px solid #eaecef;
+  border-right: 1px solid #eaecef;
+  border-bottom: 1px solid #eaecef;
   display: flex;
   flex-direction: column;
   padding: 0 15px 8px;
+}
+
+body.dark-theme .orderBook {
+  background-color: #181a20;
+  border-color: #2b313a;
 }
 
 .orderBook .nameBook {
@@ -22,6 +28,10 @@
   padding: 0 15px;
   border-bottom: 1px solid #f3f3f3;
   margin-bottom: 10px;
+}
+body.dark-theme .orderBook .nameBook {
+  border-bottom-color: #2b313a; /* Đổi viền dưới tiêu đề */
+  color: #eaecef;
 }
 
 .orderBook .orderbook-header {
@@ -41,14 +51,34 @@
 .orderBook .orderbook-list-container {
   padding: 5px 0;
   font-size: 12px;
-  height: 350px;
-  background-color: #f3f3f3;
+  min-height: 310px;
   display: flex;
+  flex-direction: column;
+}
+
+.orderBook .orderbook-list-container .orderbook-row {
+  display: flex;
+  width: calc(100% + 30px);
+  /* Kéo ra full width bù padding 15px mỗi bên */
+  margin-left: -15px;
+  margin-right: -15px;
+  padding: 0 15px;
+  cursor: pointer;
+}
+
+.orderBook .orderbook-row:hover {
+  background-color: #ededed2a;
+  font-weight: 600;
+}
+body.dark-theme .orderBook .orderbook-row:hover {
+  background-color: rgba(255, 255, 255, 0.04); /* Hover dòng tối */
 }
 
 .orderBook .content .item {
-  flex: 1; /* Tiêu đề mỗi cột chiếm 1/3 (33.33%) */
+  flex: 1;
+  /* Tiêu đề mỗi cột chiếm 1/3 (33.33%) */
 }
+
 /* Cột 2 & 3 của cả tiêu đề và số liệu đều căn phải */
 .orderBook .content .item:not(:first-child),
 .orderBook .orderbook-list-container .emit-price:not(:first-child) {
@@ -57,9 +87,21 @@
 
 
 .orderBook .orderbook-list-container .emit-price {
-  flex: 1; /* Mỗi ô dữ liệu chiếm đúng 1/3 (33.33%) */
+  flex: 1;
+  /* Mỗi ô dữ liệu chiếm đúng 1/3 (33.33%) */
   font-size: 12px;
 }
+
+.orderBook .ask-price {
+  color: #f6465d;
+  /* Màu đỏ */
+}
+
+.orderBook .bid-price {
+  color: #0ecb81;
+  /* Màu xanh */
+}
+
 
 
 .orderBook .orderbook-ticker {
@@ -67,12 +109,33 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 0;
+  height: 40px;
 }
 
 .orderBook .orderbook-ticker .price {
   font-size: 20px;
 }
 
+
+
 .orderBook .orderbook-ticker .subPrice {
   font-size: 12px;
+  text-align: left;
+  width: 50%;
+}
+
+/* màu xanh đỏ price */
+.orderBook .orderbook-ticker .price.up {
+  color: #0ecb81;
+}
+
+.orderBook .orderbook-ticker .price.down {
+  color: #f6465d;
+}
+
+/* màu xanh đỏ price */
+@media (max-width:1024px) {
+  .orderBook {
+    display: none;
+  }
 }

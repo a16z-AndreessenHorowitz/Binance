@@ -1,4 +1,4 @@
-package com.example.crypto_trading.websocket.OrderBook;
+package com.example.crypto_trading.websocket.Ticker;
 
 import java.net.URI;
 import java.util.concurrent.Executors;
@@ -19,14 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OrderBookWebSocketClient {
-
+public class TickerWebSocketClient {
   private final WebSocketClient webSocketClient;
-  private final OrderBookBinanceWebSocketHandler orderBookHandler;
+  private final TickerBinanceWebSocketHandler tickerHandler;
   private final ScheduledExecutorService reconnectExecutor = Executors.newSingleThreadScheduledExecutor();
   private final AtomicBoolean connecting = new AtomicBoolean(false);
   private final AtomicBoolean reconnectScheduled = new AtomicBoolean(false);
-  
+
   private volatile WebSocketSession currentSession;
   private volatile String currentSymbol = "";
   private volatile String lastConnectedSymbol = "";
@@ -53,24 +52,24 @@ public class OrderBookWebSocketClient {
     }
 
     currentSymbol = normalizedSymbol;
-    orderBookHandler.setCurrentSymbol(normalizedSymbol.toUpperCase());
+    tickerHandler.setCurrentSymbol(normalizedSymbol.toUpperCase());
 
-    // Stream depth20 @ 100ms của Binance
-    String url = "wss://stream.binance.com/ws/" + normalizedSymbol + "@depth20@1000ms";
-    log.info("Connecting to Binance OrderBook: {}", url);
+    // Stream 24hr ticker của Binance
+    String url = "wss://stream.binance.com/ws/" + normalizedSymbol + "@ticker";
+    log.info("Connecting to Binance Ticker: {}", url);
 
-    webSocketClient.execute(orderBookHandler, new WebSocketHttpHeaders(), URI.create(url))
+    webSocketClient.execute(tickerHandler, new WebSocketHttpHeaders(), URI.create(url))
         .whenComplete((session, exception) -> {
           connecting.set(false);
 
           if (exception != null) {
-            log.error("Cannot connect to Binance OrderBook WebSocket for {}", normalizedSymbol, exception);
+            log.error("Cannot connect to Binance Ticker WebSocket for {}", normalizedSymbol, exception);
             scheduleReconnect();
             return;
           }
 
           currentSession = session;
-          log.info("Binance OrderBook WebSocket connected for {}", normalizedSymbol);
+          log.info("Binance Ticker WebSocket connected for {}", normalizedSymbol);
 
           // Nếu symbol đã đổi trong lúc đang kết nối
           if (!normalizedSymbol.equals(lastConnectedSymbol)) {
@@ -80,8 +79,8 @@ public class OrderBookWebSocketClient {
   }
 
   @EventListener
-  public void reconnect(OrderBookWebSocketDisconnectedEvent event) {
-    log.info("Scheduling Binance OrderBook WebSocket reconnect: {}", event.reason());
+  public void reconnect(TickerWebSocketDisconnectedEvent event) {
+    log.info("Scheduling Binance Ticker WebSocket reconnect: {}", event.reason());
     scheduleReconnect();
   }
 
@@ -103,7 +102,7 @@ public class OrderBookWebSocketClient {
       try {
         currentSession.close();
       } catch (Exception e) {
-        log.warn("Error closing OrderBook session", e);
+        log.warn("Error closing Ticker session", e);
       }
     }
     currentSession = null;

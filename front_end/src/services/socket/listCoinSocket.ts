@@ -1,14 +1,10 @@
-import stompClient from "./stompClient";
+import stompClient, { onStompConnect } from "./stompClient";
 
 export function startListCoinSocket(onTicker: (ticker: any) => void) {
-
-  // Biến này dùng để lưu listCoinSubscription hiện tại.
   let listCoinSubscription: { unsubscribe: () => void } | undefined;
 
   function subscribeListCoinTicker() {
-
-    // Kiểm tra xem subscribe chưa nếu đã có subscription rồi thì return không subscrbile lần nữa
-    if (listCoinSubscription) {
+    if (listCoinSubscription || !stompClient.connected) {
       return;
     }
 
@@ -20,18 +16,11 @@ export function startListCoinSocket(onTicker: (ticker: any) => void) {
     });
   }
 
-  if (stompClient.connected) {
+  // Đăng ký callback khi kết nối STOMP
+  const unregisterConnect = onStompConnect(() => {
     subscribeListCoinTicker();
-  }
+  });
 
-  const previousOnConnect = stompClient.onConnect;
-  stompClient.onConnect = (frame) => {
-    // Nếu previousOnConnect có tồn tại thì gọi hàm onConnect cũ.
-    previousOnConnect?.(frame);
-    console.log("LIST COIN SOCKET: STOMP connected");
-    subscribeListCoinTicker();
-  };
-  //kiểm tra xem stomp đã kết nối chưa
   if (!stompClient.active) {
     console.log("LIST COIN SOCKET: activating STOMP client");
     stompClient.activate();
@@ -39,9 +28,9 @@ export function startListCoinSocket(onTicker: (ticker: any) => void) {
 
   return () => {
     console.log("LIST COIN SOCKET: unsubscribe");
+    unregisterConnect();
     listCoinSubscription?.unsubscribe();
     listCoinSubscription = undefined;
-    stompClient.onConnect = previousOnConnect;
   };
 }
 // trong đoạn return 

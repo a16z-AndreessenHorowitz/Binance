@@ -64,7 +64,7 @@ public class ListCoinBinanceWebSocketClient {
     }
 
     String streams = String.join("/", requestSymbols);
-    String url = "wss://stream.binance.com:9443/stream?streams=" + streams;
+    String url = "wss://stream.binance.com/stream?streams=" + streams;
 
     webSocketClient.execute(listCoinBinanceWebSocketHandler,
         new WebSocketHttpHeaders(),

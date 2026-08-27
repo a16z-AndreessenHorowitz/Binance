@@ -1,0 +1,327 @@
+.trading-view {
+  min-width: 750px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 1px solid #eaecef;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.coinInfoTable {
+  display: flex;
+  width: 100%;
+  padding: 0 16px;
+  height: 38px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eaecef;
+  font-size: 13px;
+  color: #707a8a;
+  background-color: #ffffff;
+}
+
+.tablist {
+  display: flex;
+  flex-direction: row; 
+  gap: 18px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 9px;
+}
+
+.tablist div:hover {
+  color: #000000;
+}
+
+.tablist .active {
+  color: #000000;
+  font-weight: 700;
+  border-bottom: 2px solid #fcd535;
+  padding-bottom: 8px;
+}
+
+.item-centers {
+  display: flex;
+  flex-direction: row; 
+  gap: 15px;
+  cursor: pointer;
+  color: #707a8a;
+  font-size: 13px;
+}
+
+.item-centers div:hover {
+  color: #000000;
+}
+
+/* --- Binance Chart Toolbar --- */
+.chart-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border-bottom: 1px solid #eaecef;
+  background-color: #ffffff;
+  font-size: 12px;
+  /* ngăn chặn người dùng bôi đen  */
+  user-select: none;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-label {
+  color: #848e9c;
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.interval-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.interval-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: #707a8a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+.interval-btn:hover {
+  color: #000000;
+  background-color: #f5f5f5;
+}
+
+.interval-btn.active {
+  color: #000000;
+  font-weight: 700;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 14px;
+  background-color: #eaecef;
+  margin: 0 4px;
+}
+
+.tools-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toolbar-icon-btn {
+  background: transparent;
+  border: none;
+  color: #848e9c;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s ease-in-out;
+}
+
+.toolbar-icon-btn:hover {
+  color: #1e2026;
+  background-color: #f5f5f5;
+}
+
+/* làm cho nút sổ xuống */
+.dropdown-caret {
+  width: 16px;
+  height: 20px;
+  font-size: 10px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.view-mode-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  color: #707a8a;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+.view-mode-btn:hover {
+  color: #000000;
+}
+
+.view-mode-btn.active {
+  color: #000000;
+  font-weight: 700;
+}
+
+.kline-container {
+  width: 100%;
+  flex-grow: 1;
+  min-height: 480px;
+  cursor: crosshair;
+}
+
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.chart-title-row {
+ border: 1px solid transparent;
+ display: flex;
+ align-items: center;
+ width: auto;
+ position: absolute;
+ z-index: 10;
+ margin-top: 3px;
+ margin-left: 7px;
+ border-radius: 7px;
+ gap: 8px;
+ font-size: 12px;
+ padding: 0px 8px 0px 0px;
+ flex-wrap: wrap;
+}
+.chart-title-row:hover {
+  border: 1px solid #eaecef;
+}
+
+body.dark-theme .chart-title-row:hover {
+  border-color: #2b313a;
+}
+.show-chart-title-row {
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  z-index: 10;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #eaecef;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  color: #848e9c;
+  background-color: transparent;
+}
+body.dark-theme .show-chart-title-row {
+  border-color: #2b313a;
+}
+.chart-title-row .icon-box{
+  background-color: transparent;
+}
+
+.icon-box {
+  width: 20px;
+  height: 20px;
+  background-color:transparent;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  z-index: 10;
+}
+/* dark theme */
+
+body.dark-theme .trading-view {
+  background-color: #181a20;
+  border-color: #2b313a;
+}
+
+body.dark-theme .coinInfoTable {
+  background-color: #181a20;
+  border-bottom-color: #2b313a;
+  color: #848e9c;
+}
+
+body.dark-theme .tablist div:hover {
+  color: #ffffff;
+}
+
+body.dark-theme .tablist .active {
+  color: #ffffff;
+  border-bottom-color: #fcd535;
+}
+
+body.dark-theme .item-centers {
+  color: #848e9c;
+}
+
+body.dark-theme .item-centers div:hover {
+  color: #ffffff;
+}
+
+body.dark-theme .chart-toolbar {
+  background-color: #181a20;
+  border-bottom-color: #2b313a;
+}
+
+body.dark-theme .toolbar-label {
+  color: #848e9c;
+}
+
+body.dark-theme .interval-btn {
+  color: #848e9c;
+}
+
+body.dark-theme .interval-btn:hover {
+  color: #ffffff;
+  background-color: #2b313a;
+}
+
+body.dark-theme .interval-btn.active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme .toolbar-divider {
+  background-color: #2b313a;
+}
+
+body.dark-theme .toolbar-icon-btn {
+  color: #848e9c;
+}
+
+body.dark-theme .toolbar-icon-btn:hover {
+  color: #ffffff;
+  background-color: #2b313a;
+}
+
+body.dark-theme .view-mode-btn {
+  color: #848e9c;
+}
+
+body.dark-theme .view-mode-btn:hover {
+  color: #ffffff;
+}
+
+body.dark-theme .view-mode-btn.active {
+  color: #ffffff;
+}

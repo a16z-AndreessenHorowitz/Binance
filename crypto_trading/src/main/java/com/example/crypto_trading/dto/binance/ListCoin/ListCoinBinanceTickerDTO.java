@@ -1,4 +1,4 @@
-package com.example.crypto_trading.dto.binance;
+package com.example.crypto_trading.dto.binance.ListCoin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

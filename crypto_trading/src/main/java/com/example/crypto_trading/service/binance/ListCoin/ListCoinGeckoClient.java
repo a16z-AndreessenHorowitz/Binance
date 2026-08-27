@@ -8,7 +8,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import com.example.crypto_trading.response.ListCoin.ListCoinGeckoMarketResponse;
+import com.example.crypto_trading.dto.coingecko.ListCoinGeckoMarketDTO;
 
 // Gọi API CoinGecko để lấy danh sách coin theo thị trường (market cap)
 @Service
@@ -21,8 +21,8 @@ public class ListCoinGeckoClient {
 
   // Cache kết quả 5 phút — tránh gọi lại CoinGecko liên tục và bị rate limit (429)
   @Cacheable(value = "coinGeckoMarkets", key = "#page + '-' + #limit")
-  public List<ListCoinGeckoMarketResponse> getMarketCoins(int page, int limit) {
-    List<ListCoinGeckoMarketResponse> coins = restClient.get()
+  public List<ListCoinGeckoMarketDTO> getMarketCoins(int page, int limit) {
+    List<ListCoinGeckoMarketDTO> coins = restClient.get()
         .uri(uriBuilder -> uriBuilder
             .path("/coins/markets")
             .queryParam("vs_currency", "usd")
@@ -32,7 +32,7 @@ public class ListCoinGeckoClient {
             .queryParam("sparkline", false)
             .build())
         .retrieve()
-        .body(new ParameterizedTypeReference<List<ListCoinGeckoMarketResponse>>() {
+        .body(new ParameterizedTypeReference<List<ListCoinGeckoMarketDTO>>() {
         });
         // Type Erasure: xoá kiểu
         // Lúc viết code:

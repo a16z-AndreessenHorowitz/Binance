@@ -58,18 +58,25 @@
 
 .nowPrice .showPrice{
   font-size:20px;
-  color:#2FBD84;
+  /* color:#2FBD84; */
 }
 .nowPrice .subPrice{
   font-size:12px;
 }
-.statValue--green{
+/* .statValue--green{
   color:#2FBD84 !important;
 }
 .statValue--red{
   color:red !important;
+} */
+
+.price-up {
+  color: #0ecb81;
 }
 
+.price-down {
+  color: #f6465d;
+}
 /* Phần state  */
 .tradingStats{
   display: flex;
